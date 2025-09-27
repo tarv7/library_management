@@ -53,3 +53,6 @@ end
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt"
+
+# Use JWT tokens [https://github.com/jwt/ruby-jwt]
+gem "jwt"
