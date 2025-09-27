@@ -52,6 +52,9 @@ group :development, :test do
 
   # Use Factory Bot for test data creation [https://github.com/factory-bot/factory_bot_rails]
   gem "factory_bot_rails"
+
+  # Use Database Cleaner for cleaning test database [https://github.com/DatabaseCleaner/database_cleaner]
+  gem "database_cleaner-active_record"
 end
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
