@@ -4,7 +4,7 @@ class Api::V1::BooksController < Api::V1::BaseController
   before_action :set_book, only: %i[ show update destroy ]
 
   def index
-    @books = Book.all
+    @books = Book.all.search(book_search_params.to_h)
   end
 
   def show
@@ -40,5 +40,9 @@ class Api::V1::BooksController < Api::V1::BaseController
 
   def book_params
     params.require(:book).permit(:title, :author, :genre, :isbn, :total_copies)
+  end
+
+  def book_search_params
+    params.permit(:title, :author, :genre)
   end
 end

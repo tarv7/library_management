@@ -79,6 +79,45 @@ RSpec.describe "/api/v1/books", type: :request do
       expect(response).to be_successful
       expect(json_response).to be_an(Array)
     end
+
+    context "with search parameters" do
+      before do
+        create(:book, valid_attributes)
+        create(:book, title: "To Kill a Mockingbird", author: "Harper Lee", genre: 0, isbn: "978-0-06-112008-4", total_copies: 3)
+        create(:book, title: "A Brief History of Time", author: "Stephen Hawking", genre: 1, isbn: "978-0-553-17698-8", total_copies: 4)
+      end
+
+      it "filters books by title" do
+        get api_v1_books_url(title: "Mockingbird"), headers: valid_headers, as: :json
+
+        expect(response).to be_successful
+        expect(json_response.length).to eq(1)
+        expect(json_response.first['title']).to eq("To Kill a Mockingbird")
+      end
+
+      it "filters books by author" do
+        get api_v1_books_url(author: "Fitzgerald"), headers: valid_headers, as: :json
+
+        expect(response).to be_successful
+        expect(json_response.length).to eq(1)
+        expect(json_response.first['author']).to eq("F. Scott Fitzgerald")
+      end
+
+      it "filters books by genre" do
+        get api_v1_books_url(genre: 1), headers: valid_headers, as: :json
+
+        expect(response).to be_successful
+        expect(json_response.length).to eq(1)
+        expect(json_response.first['title']).to eq("A Brief History of Time")
+      end
+
+      it "returns empty array when no books match search criteria" do
+        get api_v1_books_url(title: "Nonexistent"), headers: valid_headers, as: :json
+
+        expect(response).to be_successful
+        expect(json_response).to eq([])
+      end
+    end
   end
 
   describe "GET /show" do
