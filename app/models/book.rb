@@ -10,4 +10,19 @@ class Book < ApplicationRecord
     only_integer: true,
     greater_than_or_equal_to: 0
   }
+
+  scope :by_title, ->(title) { where("title ILIKE ?", "%#{title}%") }
+  scope :by_author, ->(author) { where("author ILIKE ?", "%#{author}%") }
+  scope :by_genre, ->(genre) { where(genre: genre) }
+  scope :search, ->(filters) {
+    return current_scope if !filters.is_a?(Hash)
+
+    scope = current_scope
+
+    scope = scope.by_title(filters[:title]) if filters[:title].present?
+    scope = scope.by_author(filters[:author]) if filters[:author].present?
+    scope = scope.by_genre(filters[:genre]) if filters[:genre].present?
+
+    scope
+  }
 end

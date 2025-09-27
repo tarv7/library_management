@@ -224,4 +224,81 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+
+  describe "scopes" do
+    let!(:unique_book_1) { create(:book, title: "Unique Title", author: "Unique Author", genre: :romance, isbn: "978-0-123-45678-9", total_copies: 4) }
+    before do
+      create_list(:book, 3, :fiction)
+      create_list(:book, 2, :mystery)
+    end
+
+    it "filters by title" do
+      results = Book.by_title(unique_book_1.title)
+
+      expect(results.count).to eq(1)
+      expect(results.first).to eq(unique_book_1)
+    end
+
+    it "filters by author" do
+      results = Book.by_author(unique_book_1.author)
+
+      expect(results.count).to eq(1)
+      expect(results.first).to eq(unique_book_1)
+    end
+
+    it "filters by genre" do
+      results = Book.by_genre("romance")
+
+      expect(results.count).to eq(1)
+      expect(results.first).to eq(unique_book_1)
+    end
+
+    describe "search" do
+      it "filters by title" do
+        results = Book.all.search(title: unique_book_1.title)
+
+        expect(results.count).to eq(1)
+        expect(results.first).to eq(unique_book_1)
+      end
+
+      it "filters by author" do
+        results = Book.all.search(author: unique_book_1.author)
+
+        expect(results.count).to eq(1)
+        expect(results.first).to eq(unique_book_1)
+      end
+
+      it "filters by genre" do
+        results = Book.all.search(genre: "mystery")
+
+        expect(results.count).to eq(2)
+        expect(results.pluck(:genre).uniq).to eq([ "mystery" ])
+      end
+
+      it "filters by title and author" do
+        results = Book.all.search(title: unique_book_1.title, author: unique_book_1.author)
+
+        expect(results.count).to eq(1)
+        expect(results.first).to eq(unique_book_1)
+      end
+
+      it "returns all books when no filters are provided" do
+        results = Book.all.search({})
+
+        expect(results.count).to eq(6) # 3 fiction + 2 mystery + 1 unique romance
+      end
+
+      it "returns all books when filters are nil" do
+        results = Book.all.search(nil)
+
+        expect(results.count).to eq(6) # 3 fiction + 2 mystery + 1 unique romance
+      end
+
+      it "returns no books when no matches are found" do
+        results = Book.all.search(title: "Nonexistent Title")
+
+        expect(results.count).to eq(0)
+      end
+    end
+  end
 end
