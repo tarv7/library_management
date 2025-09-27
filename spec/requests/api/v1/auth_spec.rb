@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::AuthController, type: :controller do
-  describe 'POST #create' do
+RSpec.describe "/api/v1/auth", type: :request do
+  describe "POST /create" do
     let!(:user) do
       User.create!(
         name: 'Test User',
@@ -41,13 +41,14 @@ RSpec.describe Api::V1::AuthController, type: :controller do
 
     context 'when credentials are valid' do
       it 'returns a successful response' do
-        post :create, params: valid_params
+        post api_v1_auth_index_url, params: valid_params, as: :json
 
         expect(response).to have_http_status(:created)
+        expect(response.content_type).to match(a_string_including("application/json"))
       end
 
       it 'returns a valid JWT token that can be decoded' do
-        post :create, params: valid_params
+        post api_v1_auth_index_url, params: valid_params, as: :json
 
         token = json_response['token']
 
@@ -60,19 +61,20 @@ RSpec.describe Api::V1::AuthController, type: :controller do
 
     context 'when email is invalid' do
       it 'returns unauthorized status' do
-        post :create, params: invalid_email_params
+        post api_v1_auth_index_url, params: invalid_email_params, as: :json
 
         expect(response).to have_http_status(:unauthorized)
+        expect(response.content_type).to match(a_string_including("application/json"))
       end
 
       it 'returns an error message' do
-        post :create, params: invalid_email_params
+        post api_v1_auth_index_url, params: invalid_email_params, as: :json
 
         expect(json_response['error']).to eq('Invalid email or password')
       end
 
       it 'does not return a token' do
-        post :create, params: invalid_email_params
+        post api_v1_auth_index_url, params: invalid_email_params, as: :json
 
         expect(json_response).not_to have_key('token')
       end
@@ -80,20 +82,21 @@ RSpec.describe Api::V1::AuthController, type: :controller do
 
     context 'when password is invalid' do
       it 'returns unauthorized status' do
-        post :create, params: invalid_password_params
+        post api_v1_auth_index_url, params: invalid_password_params, as: :json
 
         expect(response).to have_http_status(:unauthorized)
+        expect(response.content_type).to match(a_string_including("application/json"))
       end
 
       it 'returns an error message' do
-        post :create, params: invalid_password_params
+        post api_v1_auth_index_url, params: invalid_password_params, as: :json
 
         expect(json_response).to have_key('error')
         expect(json_response['error']).to eq('Invalid email or password')
       end
 
       it 'does not return a token' do
-        post :create, params: invalid_password_params
+        post api_v1_auth_index_url, params: invalid_password_params, as: :json
 
         expect(json_response).not_to have_key('token')
       end
@@ -128,9 +131,10 @@ RSpec.describe Api::V1::AuthController, type: :controller do
           }
         }
 
-        post :create, params: params
+        post api_v1_auth_index_url, params: params, as: :json
 
         expect(response).to have_http_status(:created)
+        expect(response.content_type).to match(a_string_including("application/json"))
         token = json_response['token']
         decoded_token = JsonWebToken.decode(token)
         expect(decoded_token[:user_id]).to eq(librarian.id)
@@ -144,9 +148,10 @@ RSpec.describe Api::V1::AuthController, type: :controller do
           }
         }
 
-        post :create, params: params
+        post api_v1_auth_index_url, params: params, as: :json
 
         expect(response).to have_http_status(:created)
+        expect(response.content_type).to match(a_string_including("application/json"))
         token = json_response['token']
         decoded_token = JsonWebToken.decode(token)
         expect(decoded_token[:user_id]).to eq(member.id)
