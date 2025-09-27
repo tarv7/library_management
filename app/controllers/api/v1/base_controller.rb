@@ -3,6 +3,8 @@ class Api::V1::BaseController < ApplicationController
 
   before_action :authenticate_user!
 
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+
   private
 
   def authenticate_user!
@@ -19,5 +21,9 @@ class Api::V1::BaseController < ApplicationController
 
   def not_authorized
     render json: { error: "Not Authorized" }, status: :unauthorized
+  end
+
+  def not_found
+    render json: { error: "Record not found" }, status: :not_found
   end
 end
