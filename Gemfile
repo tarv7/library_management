@@ -49,6 +49,9 @@ group :development, :test do
   gem "rspec-rails", "~> 8.0.0"
 
   gem "byebug"
+
+  # Use Factory Bot for test data creation [https://github.com/factory-bot/factory_bot_rails]
+  gem "factory_bot_rails"
 end
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
