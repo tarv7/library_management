@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::V1::UsersController < Api::V1::BaseController
   skip_before_action :authenticate_user!
 
   def create

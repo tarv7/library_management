@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ApplicationController, type: :controller do
+RSpec.describe Api::V1::BaseController, type: :controller do
   controller do
     def index
       render json: { message: "Success", user: current_user&.id }

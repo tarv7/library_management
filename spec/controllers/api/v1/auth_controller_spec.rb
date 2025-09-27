@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AuthController, type: :controller do
+RSpec.describe Api::V1::AuthController, type: :controller do
   describe 'POST #create' do
     let!(:user) do
       User.create!(

@@ -1,4 +1,4 @@
-class AuthController < ApplicationController
+class Api::V1::AuthController < Api::V1::BaseController
   skip_before_action :authenticate_user!
   before_action :set_user
 
