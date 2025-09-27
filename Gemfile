@@ -46,5 +46,8 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Use RSpec for tests [https://rspec.info/]
-  gem 'rspec-rails', '~> 8.0.0'
+  gem "rspec-rails", "~> 8.0.0"
 end
+
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+gem "bcrypt"
