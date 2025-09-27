@@ -1,5 +1,6 @@
 class AuthController < ApplicationController
-  before_action :set_user, only: :create
+  skip_before_action :authenticate_user!
+  before_action :set_user
 
   def create
     if @user&.authenticate(user_params[:password])
