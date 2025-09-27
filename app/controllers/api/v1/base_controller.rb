@@ -19,6 +19,12 @@ class Api::V1::BaseController < ApplicationController
     not_authorized
   end
 
+  def authorized_librarian!
+    return if current_user&.librarian?
+
+    not_authorized
+  end
+
   def not_authorized
     render json: { error: "Not Authorized" }, status: :unauthorized
   end
