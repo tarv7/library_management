@@ -5,6 +5,37 @@ info:
   version: v1
   description: API for managing library books, users and reservations
 paths:
+  "/api/v1/auth":
+    post:
+      summary: User authentication
+      tags:
+      - Authentication
+      description: Authenticates a user with email and password, returns JWT token
+        on success
+      parameters: []
+      responses:
+        '201':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AuthToken"
+        '401':
+          description: Empty credentials
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AuthError"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  "$ref": "#/components/schemas/LoginInput"
+              required:
+              - user
   "/api/v1/users":
     post:
       summary: Create a new user
@@ -128,6 +159,31 @@ components:
       - password_confirmation
       - name
       - role
+    LoginInput:
+      type: object
+      properties:
+        email_address:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          example: password123
+      required:
+      - email_address
+      - password
+    AuthToken:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MzI3NTQ4ODF9.abc123
+    AuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Invalid email or password
     Error:
       type: object
       properties:

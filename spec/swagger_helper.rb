@@ -85,6 +85,39 @@ RSpec.configure do |config|
             },
             required: ['email_address', 'password', 'password_confirmation', 'name', 'role']
           },
+          LoginInput: {
+            type: 'object',
+            properties: {
+              email_address: {
+                type: 'string',
+                format: 'email',
+                example: 'user@example.com'
+              },
+              password: {
+                type: 'string',
+                example: 'password123'
+              }
+            },
+            required: ['email_address', 'password']
+          },
+          AuthToken: {
+            type: 'object',
+            properties: {
+              token: {
+                type: 'string',
+                example: 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MzI3NTQ4ODF9.abc123'
+              }
+            }
+          },
+          AuthError: {
+            type: 'object',
+            properties: {
+              error: {
+                type: 'string',
+                example: 'Invalid email or password'
+              }
+            }
+          },
           Error: {
             type: 'object',
             properties: {
