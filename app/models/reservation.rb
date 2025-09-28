@@ -1,4 +1,6 @@
 class Reservation < ApplicationRecord
+  DUE_WITHIN = 2.weeks.freeze
+
   belongs_to :book
   belongs_to :user
 
@@ -9,6 +11,8 @@ class Reservation < ApplicationRecord
   scope :not_returned, -> { where(returned_at: nil) }
   scope :returned, -> { where.not(returned_at: nil) }
   scope :overdue, -> { not_returned.where(due_on: ...Date.today) }
+
+  before_create -> { self.due_on = borrowed_on + DUE_WITHIN }
 
   private
 

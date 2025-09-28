@@ -3,7 +3,6 @@ FactoryBot.define do
     association :book
     association :user
     borrowed_on { Date.today }
-    due_on { Date.today + 14.days }
     returned_at { nil }
 
     trait :returned do
@@ -11,7 +10,7 @@ FactoryBot.define do
     end
 
     trait :overdue do
-      due_on { Date.today - 1.day }
+      due_on { Date.today - 2.day }
     end
 
     trait :future_due do

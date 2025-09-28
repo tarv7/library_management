@@ -105,6 +105,44 @@ RSpec.describe Reservation, type: :model do
     end
   end
 
+  describe "callbacks" do
+    describe "before_create hook" do
+      let(:book) { create(:book) }
+      let(:user) { create(:user) }
+
+      it "sets due_on to borrowed_on + DUE_WITHIN when creating a reservation" do
+        borrowed_date = Date.new(2025, 1, 15)
+        reservation = build(:reservation, book:, user:, borrowed_on: borrowed_date)
+
+        expect(reservation.due_on).to be_nil # Should be nil before saving
+
+        reservation.save!
+
+        expected_due_date = borrowed_date + Reservation::DUE_WITHIN
+        expect(reservation.due_on).to eq(expected_due_date)
+      end
+
+      context "when due_on is manually set" do
+        it "overrides the manual value with the calculated value" do
+          manual_due_date = Date.today + 30.days
+          reservation = Reservation.new(
+            book: book,
+            user: user,
+            borrowed_on: Date.today,
+            due_on: manual_due_date
+          )
+
+          reservation.save!
+
+          # The hook should override the manual value
+          expected_due_date = Date.today + Reservation::DUE_WITHIN
+          expect(reservation.due_on).to eq(expected_due_date)
+          expect(reservation.due_on).not_to eq(manual_due_date)
+        end
+      end
+    end
+  end
+
   describe "scopes" do
     let(:book) { create(:book) }
     let(:user1) { create(:user) }
@@ -114,6 +152,9 @@ RSpec.describe Reservation, type: :model do
     let!(:active_reservation) { create(:reservation, book: book, user: user1, returned_at: nil) }
     let!(:returned_reservation) { create(:reservation, :returned, book: book, user: user2) }
     let!(:overdue_reservation) { create(:reservation, :overdue, book: book, user: create(:user), returned_at: nil) }
+
+    # It is necessary because there is a before_create callback that sets due_on
+    before { overdue_reservation.update_column(:due_on, 2.day.ago) }
 
     describe ".not_returned" do
       it "returns reservations that haven't been returned" do
@@ -149,9 +190,9 @@ RSpec.describe Reservation, type: :model do
         overdue_reservation = create(:reservation,
           book: book,
           user: user3,
-          due_on: Date.today - 1.day,
           returned_at: nil
         )
+        overdue_reservation.update_column(:due_on, 2.days.ago) # Set due_on to 2 days ago to make it overdue
 
         # Create reservation due tomorrow
         future_reservation = create(:reservation,
@@ -165,6 +206,12 @@ RSpec.describe Reservation, type: :model do
         expect(overdue_reservations).to include(overdue_reservation)
         expect(overdue_reservations).not_to include(future_reservation)
       end
+    end
+  end
+
+  describe "constants" do
+    it "DUE_WITHIN value" do
+      expect(Reservation::DUE_WITHIN).to eq(2.weeks)
     end
   end
 end
