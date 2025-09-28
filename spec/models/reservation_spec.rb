@@ -209,6 +209,40 @@ RSpec.describe Reservation, type: :model do
     end
   end
 
+  describe "#return" do
+    let(:book) { create(:book) }
+    let(:user) { create(:user) }
+
+    context "when update is successful" do
+      it "updates returned_at timestamp and returns true" do
+        reservation = create(:reservation, book:, user:, borrowed_on: Date.today)
+
+        expect(reservation.returned_at).to be_nil
+
+        result = reservation.return
+
+        expect(result).to be true
+        expect(reservation.returned_at).to be_within(1.second).of(Time.current)
+      end
+    end
+
+    context "when update fails" do
+      it "does not change returned_at and returns false" do
+        reservation = create(:reservation, book:, user:, borrowed_on: Date.today)
+
+        # Stub the update method to return false (simulating a failed update)
+        allow(reservation).to receive(:update).and_return(false)
+
+        expect(reservation.returned_at).to be_nil
+
+        result = reservation.return
+
+        expect(result).to be false
+        expect(reservation.returned_at).to be_nil
+      end
+    end
+  end
+
   describe "constants" do
     it "DUE_WITHIN value" do
       expect(Reservation::DUE_WITHIN).to eq(2.weeks)

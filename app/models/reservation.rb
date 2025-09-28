@@ -14,6 +14,10 @@ class Reservation < ApplicationRecord
 
   before_create -> { self.due_on = borrowed_on + DUE_WITHIN }
 
+  def return
+    update(returned_at: Time.current)
+  end
+
   private
 
   def book_already_borrowed
