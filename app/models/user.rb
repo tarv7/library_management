@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
+  has_many :reservations, dependent: :destroy
+
   enum :role, %i[ member librarian ]
 
   validates :name, presence: true

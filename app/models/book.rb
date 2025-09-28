@@ -1,4 +1,6 @@
 class Book < ApplicationRecord
+  has_many :reservations, dependent: :destroy
+
   enum :genre, %i[ fiction non_fiction mystery science_fiction fantasy romance
     thriller biography history poetry drama ]
 
@@ -25,4 +27,8 @@ class Book < ApplicationRecord
 
     scope
   }
+
+  def available_copies
+    total_copies - reservations.not_returned.count
+  end
 end

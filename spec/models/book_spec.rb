@@ -301,4 +301,51 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+
+  describe "#available_copies" do
+    let(:book) { create(:book, total_copies: 5) }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+
+    context "when no reservations exist" do
+      it "returns the total number of copies" do
+        expect(book.available_copies).to eq(5)
+      end
+    end
+
+    context "when there are active (not returned) reservations" do
+      before do
+        create(:reservation, book: book, user: user1, returned_at: nil)
+        create(:reservation, book: book, user: user2, returned_at: nil)
+      end
+
+      it "subtracts active reservations from total copies" do
+        expect(book.available_copies).to eq(3)
+      end
+    end
+
+    context "when there are returned reservations" do
+      before do
+        create(:reservation, book: book, user: user1, returned_at: Time.current)
+        create(:reservation, book: book, user: user2, returned_at: Time.current)
+      end
+
+      it "does not count returned reservations" do
+        expect(book.available_copies).to eq(5)
+      end
+    end
+
+    context "when all copies are reserved" do
+      before do
+        5.times do |i|
+          user = create(:user)
+          create(:reservation, book: book, user: user, returned_at: nil)
+        end
+      end
+
+      it "returns zero available copies" do
+        expect(book.available_copies).to eq(0)
+      end
+    end
+  end
 end
