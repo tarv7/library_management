@@ -207,6 +207,55 @@ RSpec.describe Reservation, type: :model do
         expect(overdue_reservations).not_to include(future_reservation)
       end
     end
+
+    describe ".due_today" do
+      it "returns not returned reservations that are due today" do
+        due_today_reservation = create(:reservation,
+          book: create(:book),
+          user: user3,
+          returned_at: nil
+        )
+        due_today_reservation.update_column(:due_on, Date.current)
+
+        due_tomorrow_reservation = create(:reservation,
+          book: create(:book),
+          user: user2,
+          returned_at: nil
+        )
+        due_tomorrow_reservation.update_column(:due_on, Date.tomorrow)
+
+        returned_due_today = create(:reservation,
+          book: create(:book),
+          user: user1,
+          returned_at: Time.current
+        )
+        returned_due_today.update_column(:due_on, Date.current)
+
+        due_today_reservations = Reservation.due_today
+
+        expect(due_today_reservations).to include(due_today_reservation)
+        expect(due_today_reservations).not_to include(due_tomorrow_reservation, returned_due_today, overdue_reservation)
+      end
+
+      it "excludes returned reservations even if they were due today" do
+        returned_today = create(:reservation,
+          book: create(:book),
+          user: user1,
+          returned_at: Time.current
+        )
+        returned_today.update_columns(due_on: Date.current)
+
+        due_today_reservations = Reservation.due_today
+
+        expect(due_today_reservations).not_to include(returned_today)
+      end
+
+      it "excludes overdue reservations" do
+        due_today_reservations = Reservation.due_today
+
+        expect(due_today_reservations).not_to include(overdue_reservation)
+      end
+    end
   end
 
   describe "#return" do
