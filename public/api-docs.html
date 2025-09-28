@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Management API Documentation</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .endpoint {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .method {
+            background: #27ae60;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .url {
+            font-family: 'Courier New', monospace;
+            background: #34495e;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .link-button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .link-button:hover {
+            background: #2980b9;
+        }
+        .success {
+            background: #d5f4e6;
+            border: 1px solid #27ae60;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .info {
+            background: #e8f4f8;
+            border: 1px solid #3498db;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Library Management API Documentation</h1>
+
+        <div class="success">
+            <strong>✅ Swagger Documentation Configured Successfully!</strong><br>
+            Your API documentation has been set up with RSwag and is now available through multiple interfaces.
+        </div>
+
+        <h2>🔗 Quick Access Links</h2>
+        <a href="http://localhost:3000/api-docs/index.html" class="link-button" target="_blank">Interactive Swagger UI</a>
+        <a href="http://localhost:3000/api-docs/v1/swagger.yaml" class="link-button" target="_blank">OpenAPI YAML Spec</a>
+
+        <h2>📋 Users Controller Documentation</h2>
+
+        <div class="info">
+            <strong>Controller:</strong> Api::V1::UsersController<br>
+            <strong>Description:</strong> Manages user creation in the library management system
+        </div>
+
+        <div class="endpoint">
+            <span class="method">POST</span>
+            <span class="url">/api/v1/users</span>
+            <p><strong>Description:</strong> Creates a new user (member or librarian) in the system</p>
+
+            <h4>Request Body:</h4>
+            <pre>{
+  "user": {
+    "email_address": "user@example.com",
+    "password": "password123",
+    "password_confirmation": "password123",
+    "name": "John Doe",
+    "role": "member"  // or "librarian"
+  }
+}</pre>
+
+            <h4>Success Response (201):</h4>
+            <pre>{
+  "id": 1,
+  "email_address": "user@example.com",
+  "name": "John Doe",
+  "role": "member"
+}</pre>
+
+            <h4>Error Response (422):</h4>
+            <pre>{
+  "email_address": ["can't be blank", "has already been taken"],
+  "password": ["is too short (minimum is 6 characters)"],
+  "name": ["can't be blank"],
+  "role": ["is not included in the list"]
+}</pre>
+        </div>
+
+        <h2>🛠️ Testing the API</h2>
+
+        <h3>Using cURL:</h3>
+        <pre>curl -X POST http://localhost:3000/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user": {
+      "email_address": "test@example.com",
+      "password": "password123",
+      "password_confirmation": "password123",
+      "name": "Test User",
+      "role": "member"
+    }
+  }'</pre>
+
+        <h3>Using HTTPie:</h3>
+        <pre>http POST localhost:3000/api/v1/users \
+  user:='{
+    "email_address": "test@example.com",
+    "password": "password123",
+    "password_confirmation": "password123",
+    "name": "Test User",
+    "role": "member"
+  }'</pre>
+
+        <h2>📝 Implementation Details</h2>
+
+        <h3>What was added to your project:</h3>
+        <ul>
+            <li><strong>RSwag gems</strong> - For generating OpenAPI documentation</li>
+            <li><strong>Swagger configuration</strong> - In <code>spec/swagger_helper.rb</code></li>
+            <li><strong>API specification</strong> - In <code>spec/requests/api/v1/users_swagger_spec.rb</code></li>
+            <li><strong>Documentation comments</strong> - Added to the UsersController</li>
+            <li><strong>Swagger routes</strong> - Mounted at <code>/api-docs</code></li>
+        </ul>
+
+        <h3>Available User Roles:</h3>
+        <ul>
+            <li><strong>member</strong> - Regular library user who can borrow books</li>
+            <li><strong>librarian</strong> - Library staff with administrative access</li>
+        </ul>
+
+        <h3>Validation Rules:</h3>
+        <ul>
+            <li>Email address must be unique and valid format</li>
+            <li>Password minimum length is 6 characters</li>
+            <li>Password confirmation must match password</li>
+            <li>Name is required</li>
+            <li>Role must be either "member" or "librarian"</li>
+        </ul>
+
+        <div class="info">
+            <strong>💡 Pro Tip:</strong> You can regenerate the Swagger documentation anytime by running: <code>rake rswag:specs:swaggerize</code>
+        </div>
+    </div>
+</body>
+</html>

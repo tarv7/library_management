@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  # API Documentation landing page
+  get 'docs' => redirect('/api-docs.html')
+
   namespace :api do
     namespace :v1 do
       resources :users, only: :create do
