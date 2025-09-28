@@ -206,6 +206,59 @@ RSpec.configure do |config|
               '$ref' => '#/components/schemas/Book'
             }
           },
+          Reservation: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+                example: 1
+              },
+              book_id: {
+                type: 'integer',
+                example: 1
+              },
+              user_id: {
+                type: 'integer',
+                example: 1
+              },
+              borrowed_on: {
+                type: 'string',
+                format: 'date',
+                example: '2025-09-28'
+              },
+              due_on: {
+                type: 'string',
+                format: 'date',
+                example: '2025-10-12'
+              },
+              returned_at: {
+                type: 'string',
+                format: 'date-time',
+                nullable: true,
+                example: '2025-10-10T10:30:00Z'
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time'
+              },
+              updated_at: {
+                type: 'string',
+                format: 'date-time'
+              }
+            }
+          },
+          ReservationError: {
+            type: 'object',
+            properties: {
+              book: {
+                type: 'array',
+                items: {
+                  type: 'string'
+                },
+                example: ['is already borrowed', 'has no available copies']
+              }
+            }
+          },
           Error: {
             type: 'object',
             properties: {
