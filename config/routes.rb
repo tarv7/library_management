@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: :create do
         get "members/dashboard", to: "users/members/dashboard#show", on: :collection
+        get "librarians/dashboard", to: "users/librarians/dashboard#show", on: :collection
       end
       resources :auth, only: :create
       resources :books do
