@@ -69,4 +69,51 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "scopes" do
+    let!(:member1) { create(:user, :member) }
+    let!(:member2) { create(:user, :member) }
+    let!(:librarian1) { create(:user, :librarian) }
+    let!(:librarian2) { create(:user, :librarian) }
+
+    describe ".member" do
+      it "returns only users with member role" do
+        members = User.member
+
+        expect(members).to include(member1, member2)
+        expect(members).not_to include(librarian1, librarian2)
+        expect(members.count).to eq(2)
+      end
+    end
+
+    describe ".librarian" do
+      it "returns only users with librarian role" do
+        librarians = User.librarian
+
+        expect(librarians).to include(librarian1, librarian2)
+        expect(librarians).not_to include(member1, member2)
+        expect(librarians.count).to eq(2)
+      end
+    end
+
+    describe ".with_overdue_books" do
+      let(:book1) { create(:book) }
+      let(:book2) { create(:book) }
+
+      it "returns only members with overdue reservations" do
+        # Member with overdue reservation
+        overdue_reservation = create(:reservation, user: member1, book: book1, returned_at: nil)
+        overdue_reservation.update_column(:due_on, 1.day.ago)
+
+        # Member without overdue reservations
+        create(:reservation, user: member2, book: book2, returned_at: nil)
+
+        members_with_overdue = User.with_overdue_books
+
+        expect(members_with_overdue.count).to eq(1)
+        expect(members_with_overdue).to include(member1)
+        expect(members_with_overdue).not_to include(member2, librarian1, librarian2)
+      end
+    end
+  end
 end

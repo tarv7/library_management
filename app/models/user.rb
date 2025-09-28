@@ -8,4 +8,10 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :role, presence: true
+
+  scope :member, -> { where(role: :member) }
+  scope :librarian, -> { where(role: :librarian) }
+  scope :with_overdue_books, -> {
+    member.joins(:reservations).merge(Reservation.overdue).distinct
+  }
 end
