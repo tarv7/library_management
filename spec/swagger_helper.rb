@@ -259,6 +259,140 @@ RSpec.configure do |config|
               }
             }
           },
+          MemberDashboard: {
+            type: 'object',
+            properties: {
+              member: {
+                type: 'object',
+                properties: {
+                  id: {
+                    type: 'integer',
+                    example: 1
+                  },
+                  name: {
+                    type: 'string',
+                    example: 'John Doe'
+                  },
+                  email_address: {
+                    type: 'string',
+                    format: 'email',
+                    example: 'john@example.com'
+                  }
+                }
+              },
+              borrowed_books: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    reservation_id: {
+                      type: 'integer',
+                      example: 1
+                    },
+                    borrowed_on: {
+                      type: 'string',
+                      format: 'date',
+                      example: '2025-09-28'
+                    },
+                    due_on: {
+                      type: 'string',
+                      format: 'date',
+                      example: '2025-10-12'
+                    },
+                    book: {
+                      type: 'object',
+                      properties: {
+                        id: {
+                          type: 'integer',
+                          example: 1
+                        },
+                        title: {
+                          type: 'string',
+                          example: 'The Great Gatsby'
+                        },
+                        author: {
+                          type: 'string',
+                          example: 'F. Scott Fitzgerald'
+                        },
+                        isbn: {
+                          type: 'string',
+                          example: '978-0-7432-7356-5'
+                        },
+                        genre: {
+                          type: 'string',
+                          example: 'fiction'
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              overdue_books: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    reservation_id: {
+                      type: 'integer',
+                      example: 2
+                    },
+                    borrowed_on: {
+                      type: 'string',
+                      format: 'date',
+                      example: '2025-09-01'
+                    },
+                    due_on: {
+                      type: 'string',
+                      format: 'date',
+                      example: '2025-09-15'
+                    },
+                    days_overdue: {
+                      type: 'integer',
+                      example: 13
+                    },
+                    book: {
+                      type: 'object',
+                      properties: {
+                        id: {
+                          type: 'integer',
+                          example: 2
+                        },
+                        title: {
+                          type: 'string',
+                          example: '1984'
+                        },
+                        author: {
+                          type: 'string',
+                          example: 'George Orwell'
+                        },
+                        isbn: {
+                          type: 'string',
+                          example: '978-0-452-28423-4'
+                        },
+                        genre: {
+                          type: 'string',
+                          example: 'science_fiction'
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              summary: {
+                type: 'object',
+                properties: {
+                  total_borrowed_books: {
+                    type: 'integer',
+                    example: 3
+                  },
+                  total_overdue_books: {
+                    type: 'integer',
+                    example: 1
+                  }
+                }
+              }
+            }
+          },
           Error: {
             type: 'object',
             properties: {
