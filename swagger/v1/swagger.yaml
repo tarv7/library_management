@@ -36,6 +36,169 @@ paths:
                   "$ref": "#/components/schemas/LoginInput"
               required:
               - user
+  "/api/v1/books":
+    get:
+      summary: List all books
+      tags:
+      - Books
+      description: Retrieves a list of all books. Supports search filters for title,
+        author, and genre.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: title
+        in: query
+        required: false
+        description: Filter by book title (partial match)
+        schema:
+          type: string
+      - name: author
+        in: query
+        required: false
+        description: Filter by author name (partial match)
+        schema:
+          type: string
+      - name: genre
+        in: query
+        required: false
+        description: "Filter by genre:\n * `fiction` \n * `non_fiction` \n * `mystery`
+          \n * `science_fiction` \n * `fantasy` \n * `romance` \n * `thriller` \n
+          * `biography` \n * `history` \n * `poetry` \n * `drama` \n "
+        enum:
+        - fiction
+        - non_fiction
+        - mystery
+        - science_fiction
+        - fantasy
+        - romance
+        - thriller
+        - biography
+        - history
+        - poetry
+        - drama
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Books retrieved successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BooksArray"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+    post:
+      summary: Create a new book
+      tags:
+      - Books
+      description: Creates a new book in the library. Only librarians can create books.
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Book"
+        '401':
+          description: Unauthorized - Only librarians can create books
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book:
+                  "$ref": "#/components/schemas/BookInput"
+              required:
+              - book
+  "/api/v1/books/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Book ID
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Show a book
+      tags:
+      - Books
+      description: Retrieves details of a specific book
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Book found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Book"
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+    put:
+      summary: Update a book
+      tags:
+      - Books
+      description: Updates a book. Only librarians can update books.
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Book"
+        '401':
+          description: Unauthorized - Only librarians can update books
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book:
+                  "$ref": "#/components/schemas/BookInput"
+              required:
+              - book
+    delete:
+      summary: Delete a book
+      tags:
+      - Books
+      description: Deletes a book from the library. Only librarians can delete books.
+      security:
+      - bearerAuth: []
+      responses:
+        '204':
+          description: Book deleted successfully
+        '401':
+          description: Unauthorized - Only librarians can delete books
   "/api/v1/users":
     post:
       summary: Create a new user
@@ -105,6 +268,11 @@ servers:
 - url: http://localhost:3000
   description: Development server
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     User:
       type: object
@@ -184,6 +352,94 @@ components:
         error:
           type: string
           example: Invalid email or password
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: The Great Gatsby
+        author:
+          type: string
+          example: F. Scott Fitzgerald
+        genre:
+          type: string
+          enum:
+          - fiction
+          - non_fiction
+          - mystery
+          - science_fiction
+          - fantasy
+          - romance
+          - thriller
+          - biography
+          - history
+          - poetry
+          - drama
+          example: fiction
+        isbn:
+          type: string
+          example: 978-0-7432-7356-5
+        total_copies:
+          type: integer
+          example: 5
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+          example: http://localhost:3000/api/v1/books/1.json
+    BookInput:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 2
+          maxLength: 255
+          example: The Great Gatsby
+        author:
+          type: string
+          minLength: 2
+          maxLength: 255
+          example: F. Scott Fitzgerald
+        genre:
+          type: string
+          enum:
+          - fiction
+          - non_fiction
+          - mystery
+          - science_fiction
+          - fantasy
+          - romance
+          - thriller
+          - biography
+          - history
+          - poetry
+          - drama
+          example: fiction
+        isbn:
+          type: string
+          example: 978-0-7432-7356-5
+        total_copies:
+          type: integer
+          minimum: 0
+          example: 5
+      required:
+      - title
+      - author
+      - genre
+      - isbn
+      - total_copies
+    BooksArray:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Book"
     Error:
       type: object
       properties:

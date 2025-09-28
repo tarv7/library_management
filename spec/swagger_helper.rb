@@ -30,6 +30,13 @@ RSpec.configure do |config|
         }
       ],
       components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+          }
+        },
         schemas: {
           User: {
             type: 'object',
@@ -116,6 +123,87 @@ RSpec.configure do |config|
                 type: 'string',
                 example: 'Invalid email or password'
               }
+            }
+          },
+          Book: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+                example: 1
+              },
+              title: {
+                type: 'string',
+                example: 'The Great Gatsby'
+              },
+              author: {
+                type: 'string',
+                example: 'F. Scott Fitzgerald'
+              },
+              genre: {
+                type: 'string',
+                enum: ['fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama'],
+                example: 'fiction'
+              },
+              isbn: {
+                type: 'string',
+                example: '978-0-7432-7356-5'
+              },
+              total_copies: {
+                type: 'integer',
+                example: 5
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time'
+              },
+              updated_at: {
+                type: 'string',
+                format: 'date-time'
+              },
+              url: {
+                type: 'string',
+                format: 'uri',
+                example: 'http://localhost:3000/api/v1/books/1.json'
+              }
+            }
+          },
+          BookInput: {
+            type: 'object',
+            properties: {
+              title: {
+                type: 'string',
+                minLength: 2,
+                maxLength: 255,
+                example: 'The Great Gatsby'
+              },
+              author: {
+                type: 'string',
+                minLength: 2,
+                maxLength: 255,
+                example: 'F. Scott Fitzgerald'
+              },
+              genre: {
+                type: 'string',
+                enum: ['fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama'],
+                example: 'fiction'
+              },
+              isbn: {
+                type: 'string',
+                example: '978-0-7432-7356-5'
+              },
+              total_copies: {
+                type: 'integer',
+                minimum: 0,
+                example: 5
+              }
+            },
+            required: ['title', 'author', 'genre', 'isbn', 'total_copies']
+          },
+          BooksArray: {
+            type: 'array',
+            items: {
+              '$ref' => '#/components/schemas/Book'
             }
           },
           Error: {
