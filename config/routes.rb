@@ -10,7 +10,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users, only: :create
+      resources :users, only: :create do
+        get "members/dashboard", to: "users/members/dashboard#show", on: :collection
+      end
       resources :auth, only: :create
       resources :books do
         resources :reservations, only: %i[ create update ], controller: "books/reservations"
