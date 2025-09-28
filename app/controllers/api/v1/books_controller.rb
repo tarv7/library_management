@@ -1,6 +1,5 @@
 class Api::V1::BooksController < Api::V1::BaseController
   before_action :authorized_librarian!, only: %i[ create update destroy ]
-
   before_action :set_book, only: %i[ show update destroy ]
 
   def index

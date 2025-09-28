@@ -25,6 +25,12 @@ class Api::V1::BaseController < ApplicationController
     not_authorized
   end
 
+  def authorized_member!
+    return if current_user&.member?
+
+    not_authorized
+  end
+
   def not_authorized
     render json: { error: "Not Authorized" }, status: :unauthorized
   end
