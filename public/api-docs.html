@@ -97,95 +97,88 @@
         <a href="http://localhost:3000/api-docs/index.html" class="link-button" target="_blank">Interactive Swagger UI</a>
         <a href="http://localhost:3000/api-docs/v1/swagger.yaml" class="link-button" target="_blank">OpenAPI YAML Spec</a>
 
-        <h2>📋 Users Controller Documentation</h2>
+        <h2>📋 API Overview</h2>
 
         <div class="info">
-            <strong>Controller:</strong> Api::V1::UsersController<br>
-            <strong>Description:</strong> Manages user creation in the library management system
+            <strong>API Type:</strong> RESTful Library Management API<br>
+            <strong>Authentication:</strong> JWT Bearer Token<br>
+            <strong>Format:</strong> JSON Request/Response
+        </div>
+
+        <h2>🎯 Main Features</h2>
+
+        <div class="endpoint">
+            <h4>👥 User Management</h4>
+            <p>Complete user registration and authentication system with role-based access control.</p>
         </div>
 
         <div class="endpoint">
-            <span class="method">POST</span>
-            <span class="url">/api/v1/users</span>
-            <p><strong>Description:</strong> Creates a new user (member or librarian) in the system</p>
-
-            <h4>Request Body:</h4>
-            <pre>{
-  "user": {
-    "email_address": "user@example.com",
-    "password": "password123",
-    "password_confirmation": "password123",
-    "name": "John Doe",
-    "role": "member"  // or "librarian"
-  }
-}</pre>
-
-            <h4>Success Response (201):</h4>
-            <pre>{
-  "id": 1,
-  "email_address": "user@example.com",
-  "name": "John Doe",
-  "role": "member"
-}</pre>
-
-            <h4>Error Response (422):</h4>
-            <pre>{
-  "email_address": ["can't be blank", "has already been taken"],
-  "password": ["is too short (minimum is 6 characters)"],
-  "name": ["can't be blank"],
-  "role": ["is not included in the list"]
-}</pre>
+            <h4>📚 Book Management</h4>
+            <p>Full CRUD operations for library book catalog with search and filtering capabilities.</p>
         </div>
 
-        <h2>🛠️ Testing the API</h2>
+        <div class="endpoint">
+            <h4>📖 Reservation System</h4>
+            <p>Book borrowing and returning system with overdue tracking and availability management.</p>
+        </div>
 
-        <h3>Using cURL:</h3>
-        <pre>curl -X POST http://localhost:3000/api/v1/users \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user": {
-      "email_address": "test@example.com",
-      "password": "password123",
-      "password_confirmation": "password123",
-      "name": "Test User",
-      "role": "member"
-    }
-  }'</pre>
+        <div class="endpoint">
+            <h4>📊 Dashboard Analytics</h4>
+            <p>Personalized dashboards for members and comprehensive management tools for librarians.</p>
+        </div>
 
-        <h3>Using HTTPie:</h3>
-        <pre>http POST localhost:3000/api/v1/users \
-  user:='{
-    "email_address": "test@example.com",
-    "password": "password123",
-    "password_confirmation": "password123",
-    "name": "Test User",
-    "role": "member"
-  }'</pre>
+        <h2>🛠️ Getting Started</h2>
 
-        <h2>📝 Implementation Details</h2>
+        <div class="info">
+            <strong>Base URL:</strong> <code>http://localhost:3000/api/v1</code><br>
+            <strong>Authentication:</strong> Include <code>Authorization: Bearer &lt;token&gt;</code> header<br>
+            <strong>Content-Type:</strong> <code>application/json</code>
+        </div>
 
-        <h3>What was added to your project:</h3>
+        <h3>Authentication Flow:</h3>
+        <ol>
+            <li><strong>Register:</strong> Create a new user account (member or librarian)</li>
+            <li><strong>Login:</strong> Authenticate with email/password to receive JWT token</li>
+            <li><strong>Use API:</strong> Include the token in Authorization header for protected endpoints</li>
+        </ol>
+
+        <h3>Available Endpoints:</h3>
         <ul>
-            <li><strong>RSwag gems</strong> - For generating OpenAPI documentation</li>
-            <li><strong>Swagger configuration</strong> - In <code>spec/swagger_helper.rb</code></li>
-            <li><strong>API specification</strong> - In <code>spec/requests/api/v1/users_swagger_spec.rb</code></li>
-            <li><strong>Documentation comments</strong> - Added to the UsersController</li>
-            <li><strong>Swagger routes</strong> - Mounted at <code>/api-docs</code></li>
+            <li><strong>Users:</strong> Registration and user management</li>
+            <li><strong>Authentication:</strong> Login and JWT token generation</li>
+            <li><strong>Books:</strong> Library catalog management (CRUD)</li>
+            <li><strong>Reservations:</strong> Book borrowing and returning</li>
+            <li><strong>Dashboards:</strong> Member and librarian analytics</li>
         </ul>
 
-        <h3>Available User Roles:</h3>
+        <h2>� User Roles & Permissions</h2>
+
+        <div class="endpoint">
+            <h4>📖 Member</h4>
+            <p>Regular library users who can browse books, create reservations, and view their personal dashboard with borrowed books and due dates.</p>
+        </div>
+
+        <div class="endpoint">
+            <h4>👨‍💼 Librarian</h4>
+            <p>Library staff with administrative privileges to manage books, process returns, and access comprehensive dashboard with library statistics.</p>
+        </div>
+
+        <h2>🔧 Technical Details</h2>
+
+        <h3>Documentation Stack:</h3>
         <ul>
-            <li><strong>member</strong> - Regular library user who can borrow books</li>
-            <li><strong>librarian</strong> - Library staff with administrative access</li>
+            <li><strong>RSwag/Swagger:</strong> Interactive API documentation and testing</li>
+            <li><strong>OpenAPI 3.0:</strong> Industry standard API specification</li>
+            <li><strong>JWT Authentication:</strong> Secure token-based authentication</li>
+            <li><strong>Role-based Access:</strong> Member and librarian permission levels</li>
         </ul>
 
-        <h3>Validation Rules:</h3>
+        <h3>API Features:</h3>
         <ul>
-            <li>Email address must be unique and valid format</li>
-            <li>Password minimum length is 6 characters</li>
-            <li>Password confirmation must match password</li>
-            <li>Name is required</li>
-            <li>Role must be either "member" or "librarian"</li>
+            <li><strong>RESTful Design:</strong> Standard HTTP methods and status codes</li>
+            <li><strong>JSON Format:</strong> Consistent request/response structure</li>
+            <li><strong>Error Handling:</strong> Detailed error messages and validation</li>
+            <li><strong>Search & Filtering:</strong> Advanced query capabilities</li>
         </ul>
 
         <div class="info">
