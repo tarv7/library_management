@@ -4,7 +4,7 @@ class Api::V1::AuthController < Api::V1::BaseController
 
   def create
     if @user&.authenticate(user_params[:password])
-      token = JsonWebToken.encode(user_id: @user.id)
+      token = JsonWebToken.encode_user(@user)
 
       render json: { token: token }, status: :created
     else

@@ -1,6 +1,18 @@
 class JsonWebToken
   SECRET_KEY = Rails.application.secret_key_base
 
+  def self.encode_user(user, exp = 24.hours.from_now)
+    payload = {
+      user_id: user.id,
+      email_address: user.email_address,
+      name: user.name,
+      role: user.role,
+      created_at: user.created_at
+    }
+
+    encode(payload, exp)
+  end
+
   def self.encode(payload, exp = 24.hours.from_now)
     payload[:exp] = exp.to_i
 

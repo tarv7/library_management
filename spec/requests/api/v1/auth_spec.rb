@@ -55,6 +55,10 @@ RSpec.describe "/api/v1/auth", type: :request do
         decoded_token = JsonWebToken.decode(token)
         expect(decoded_token).to be_present
         expect(decoded_token[:user_id]).to eq(user.id)
+        expect(decoded_token[:email_address]).to eq(user.email_address)
+        expect(decoded_token[:name]).to eq(user.name)
+        expect(decoded_token[:role]).to eq(user.role)
+        expect(decoded_token[:created_at]).to be_present
         expect(decoded_token[:exp]).to be > Time.current.to_i
       end
     end
@@ -138,6 +142,11 @@ RSpec.describe "/api/v1/auth", type: :request do
         token = json_response['token']
         decoded_token = JsonWebToken.decode(token)
         expect(decoded_token[:user_id]).to eq(librarian.id)
+        expect(decoded_token[:email_address]).to eq(librarian.email_address)
+        expect(decoded_token[:name]).to eq(librarian.name)
+        expect(decoded_token[:role]).to eq('librarian')
+        expect(decoded_token[:created_at]).to be_present
+        expect(decoded_token[:exp]).to be > Time.current.to_i
       end
 
       it 'authenticates member successfully' do
@@ -155,6 +164,11 @@ RSpec.describe "/api/v1/auth", type: :request do
         token = json_response['token']
         decoded_token = JsonWebToken.decode(token)
         expect(decoded_token[:user_id]).to eq(member.id)
+        expect(decoded_token[:email_address]).to eq(member.email_address)
+        expect(decoded_token[:name]).to eq(member.name)
+        expect(decoded_token[:role]).to eq('member')
+        expect(decoded_token[:created_at]).to be_present
+        expect(decoded_token[:exp]).to be > Time.current.to_i
       end
     end
   end

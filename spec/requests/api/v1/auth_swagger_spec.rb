@@ -46,6 +46,14 @@ RSpec.describe 'Api::V1::Auth', type: :request do
           data = JSON.parse(response.body)
           expect(data['token']).to be_present
           expect(data['token']).to be_a(String)
+
+          decoded_token = JsonWebToken.decode(data['token'])
+          expect(decoded_token[:user_id]).to be_present
+          expect(decoded_token[:email_address]).to eq('test@example.com')
+          expect(decoded_token[:name]).to eq('Test User')
+          expect(decoded_token[:role]).to eq('member')
+          expect(decoded_token[:created_at]).to be_present
+          expect(decoded_token[:exp]).to be > Time.current.to_i
         end
       end
 

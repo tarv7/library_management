@@ -5,8 +5,8 @@ require 'swagger_helper'
 RSpec.describe 'Api::V1::Books::Reservations', type: :request do
   let(:member) { create(:user, role: 'member') }
   let(:librarian) { create(:user, role: 'librarian') }
-  let(:member_token) { JsonWebToken.encode(user_id: member.id) }
-  let(:librarian_token) { JsonWebToken.encode(user_id: librarian.id) }
+  let(:member_token) { JsonWebToken.encode_user(member) }
+  let(:librarian_token) { JsonWebToken.encode_user(librarian) }
 
   path '/api/v1/books/{book_id}/reservations' do
     parameter name: 'book_id', in: :path, type: :integer, description: 'Book ID'

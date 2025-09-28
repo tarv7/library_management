@@ -20,8 +20,8 @@ RSpec.describe "/api/v1/books", type: :request do
     )
   end
 
-  let(:auth_token) { JsonWebToken.encode(user_id: librarian_user.id) }
-  let(:member_auth_token) { JsonWebToken.encode(user_id: member_user.id) }
+  let(:auth_token) { JsonWebToken.encode_user(librarian_user) }
+  let(:member_auth_token) { JsonWebToken.encode_user(member_user) }
   let(:valid_attributes) {
     {
       title: "The Great Gatsby",

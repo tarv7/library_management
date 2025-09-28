@@ -7,8 +7,8 @@ RSpec.describe "/api/v1/books/:book_id/reservations", type: :request do
   let!(:book) { create(:book, total_copies: 2) }
   let!(:book_no_copies) { create(:book, total_copies: 0) }
 
-  let(:member_auth_token) { JsonWebToken.encode(user_id: member_user.id) }
-  let(:librarian_auth_token) { JsonWebToken.encode(user_id: librarian_user.id) }
+  let(:member_auth_token) { JsonWebToken.encode_user(member_user) }
+  let(:librarian_auth_token) { JsonWebToken.encode_user(librarian_user) }
   let(:member_headers) { { "Authorization" => "Bearer #{member_auth_token}" } }
   let(:librarian_headers) { { "Authorization" => "Bearer #{librarian_auth_token}" } }
 

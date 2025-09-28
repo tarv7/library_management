@@ -17,7 +17,7 @@ RSpec.describe Api::V1::BaseController, type: :controller do
     )
   end
 
-  let(:valid_token) { JsonWebToken.encode(user_id: user.id) }
+  let(:valid_token) { JsonWebToken.encode_user(user) }
 
   describe "#authenticate_user!" do
     context "when valid token is provided" do
@@ -62,7 +62,7 @@ RSpec.describe Api::V1::BaseController, type: :controller do
     end
 
     context "when token is expired" do
-      let(:expired_token) { JsonWebToken.encode({ user_id: user.id }, 1.hour.ago) }
+      let(:expired_token) { JsonWebToken.encode_user(user, 1.hour.ago) }
 
       before do
         request.headers["Authorization"] = "Bearer #{expired_token}"

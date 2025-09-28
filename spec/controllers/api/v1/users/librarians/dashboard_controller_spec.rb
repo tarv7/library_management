@@ -19,7 +19,7 @@ RSpec.describe "Api::V1::Users::Librarians::Dashboard", type: :request do
     create(:reservation, user: member, book: book3)
   end
 
-  let(:librarian_token) { JsonWebToken.encode(user_id: librarian.id) }
+  let(:librarian_token) { JsonWebToken.encode_user(librarian) }
   let(:headers) { { "Authorization" => "Bearer #{librarian_token}" } }
 
   describe "GET /api/v1/users/librarians/dashboard" do
@@ -79,7 +79,7 @@ RSpec.describe "Api::V1::Users::Librarians::Dashboard", type: :request do
     end
 
     context "when user is a member" do
-      let(:member_token) { JsonWebToken.encode(user_id: member.id) }
+      let(:member_token) { JsonWebToken.encode_user(member) }
       let(:member_headers) { { "Authorization" => "Bearer #{member_token}" } }
 
       it "returns unauthorized status" do
