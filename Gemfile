@@ -55,6 +55,9 @@ group :development, :test do
 
   # Use Database Cleaner for cleaning test database [https://github.com/DatabaseCleaner/database_cleaner]
   gem "database_cleaner-active_record"
+
+  # Swagger specs generator [https://github.com/rswag/rswag]
+  gem "rswag-specs"
 end
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
@@ -62,3 +65,7 @@ gem "bcrypt"
 
 # Use JWT tokens [https://github.com/jwt/ruby-jwt]
 gem "jwt"
+
+# Swagger documentation [https://github.com/rswag/rswag]
+gem "rswag-api"
+gem "rswag-ui"
