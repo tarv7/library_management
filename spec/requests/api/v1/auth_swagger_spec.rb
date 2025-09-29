@@ -17,7 +17,7 @@ RSpec.describe 'Api::V1::Auth', type: :request do
             '$ref' => '#/components/schemas/LoginInput'
           }
         },
-        required: ['user']
+        required: [ 'user' ]
       }
 
       response(201, 'Authentication successful') do

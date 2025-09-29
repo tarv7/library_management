@@ -13,7 +13,7 @@ RSpec.describe 'Api::V1::Users::Members::Dashboard', type: :request do
       tags 'Member Dashboard'
       description 'Retrieves dashboard information for a member including borrowed books, overdue books, and summary statistics. Only accessible by members.'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response(200, 'Dashboard data retrieved successfully') do
         schema '$ref' => '#/components/schemas/MemberDashboard'

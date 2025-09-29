@@ -60,11 +60,11 @@ RSpec.configure do |config|
               },
               role: {
                 type: 'string',
-                enum: ['member', 'librarian'],
+                enum: [ 'member', 'librarian' ],
                 example: 'member'
               }
             },
-            required: ['email_address', 'name', 'role']
+            required: [ 'email_address', 'name', 'role' ]
           },
           UserInput: {
             type: 'object',
@@ -90,11 +90,11 @@ RSpec.configure do |config|
               },
               role: {
                 type: 'string',
-                enum: ['member', 'librarian'],
+                enum: [ 'member', 'librarian' ],
                 example: 'member'
               }
             },
-            required: ['email_address', 'password', 'password_confirmation', 'name', 'role']
+            required: [ 'email_address', 'password', 'password_confirmation', 'name', 'role' ]
           },
           LoginInput: {
             type: 'object',
@@ -109,7 +109,7 @@ RSpec.configure do |config|
                 example: 'password123'
               }
             },
-            required: ['email_address', 'password']
+            required: [ 'email_address', 'password' ]
           },
           AuthToken: {
             type: 'object',
@@ -146,7 +146,7 @@ RSpec.configure do |config|
               },
               genre: {
                 type: 'string',
-                enum: ['fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama'],
+                enum: [ 'fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama' ],
                 example: 'fiction'
               },
               isbn: {
@@ -189,7 +189,7 @@ RSpec.configure do |config|
               },
               genre: {
                 type: 'string',
-                enum: ['fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama'],
+                enum: [ 'fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama' ],
                 example: 'fiction'
               },
               isbn: {
@@ -202,7 +202,7 @@ RSpec.configure do |config|
                 example: 5
               }
             },
-            required: ['title', 'author', 'genre', 'isbn', 'total_copies']
+            required: [ 'title', 'author', 'genre', 'isbn', 'total_copies' ]
           },
           BooksArray: {
             type: 'array',
@@ -259,7 +259,7 @@ RSpec.configure do |config|
                 items: {
                   type: 'string'
                 },
-                example: ['is already borrowed', 'has no available copies']
+                example: [ 'is already borrowed', 'has no available copies' ]
               }
             }
           },

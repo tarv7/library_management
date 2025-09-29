@@ -13,11 +13,11 @@ RSpec.describe 'Api::V1::Books', type: :request do
       tags 'Books'
       description 'Retrieves a list of all books. Supports search filters for title, author, and genre.'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       parameter name: :title, in: :query, type: :string, required: false, description: 'Filter by book title (partial match)'
       parameter name: :author, in: :query, type: :string, required: false, description: 'Filter by author name (partial match)'
-      parameter name: :genre, in: :query, type: :string, required: false, description: 'Filter by genre', enum: ['fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama']
+      parameter name: :genre, in: :query, type: :string, required: false, description: 'Filter by genre', enum: [ 'fiction', 'non_fiction', 'mystery', 'science_fiction', 'fantasy', 'romance', 'thriller', 'biography', 'history', 'poetry', 'drama' ]
 
       response(200, 'Books retrieved successfully') do
         schema '$ref' => '#/components/schemas/BooksArray'
@@ -50,7 +50,7 @@ RSpec.describe 'Api::V1::Books', type: :request do
       description 'Creates a new book in the library. Only librarians can create books.'
       consumes 'application/json'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       parameter name: :book, in: :body, schema: {
         type: :object,
@@ -59,7 +59,7 @@ RSpec.describe 'Api::V1::Books', type: :request do
             '$ref' => '#/components/schemas/BookInput'
           }
         },
-        required: ['book']
+        required: [ 'book' ]
       }
 
       response(201, 'Book created successfully') do
@@ -132,7 +132,7 @@ RSpec.describe 'Api::V1::Books', type: :request do
       tags 'Books'
       description 'Retrieves details of a specific book'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response(200, 'Book found') do
         schema '$ref' => '#/components/schemas/Book'
@@ -162,7 +162,7 @@ RSpec.describe 'Api::V1::Books', type: :request do
       description 'Updates a book. Only librarians can update books.'
       consumes 'application/json'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       parameter name: :book, in: :body, schema: {
         type: :object,
@@ -171,7 +171,7 @@ RSpec.describe 'Api::V1::Books', type: :request do
             '$ref' => '#/components/schemas/BookInput'
           }
         },
-        required: ['book']
+        required: [ 'book' ]
       }
 
       response(200, 'Book updated successfully') do
@@ -219,7 +219,7 @@ RSpec.describe 'Api::V1::Books', type: :request do
     delete('Delete a book') do
       tags 'Books'
       description 'Deletes a book from the library. Only librarians can delete books.'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response(204, 'Book deleted successfully') do
         let(:Authorization) { "Bearer #{librarian_token}" }

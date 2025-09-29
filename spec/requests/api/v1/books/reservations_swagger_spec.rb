@@ -15,7 +15,7 @@ RSpec.describe 'Api::V1::Books::Reservations', type: :request do
       tags 'Reservations'
       description 'Creates a new reservation for a book. Only members can create reservations. Each member can only have one active reservation per book.'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response(201, 'Reservation created successfully') do
         schema '$ref' => '#/components/schemas/Reservation'
@@ -109,7 +109,7 @@ RSpec.describe 'Api::V1::Books::Reservations', type: :request do
       tags 'Reservations'
       description 'Marks a reservation as returned. Only librarians can perform this action.'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response(200, 'Book returned successfully') do
         schema '$ref' => '#/components/schemas/Reservation'

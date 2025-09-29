@@ -13,9 +13,9 @@ RSpec.describe 'Api::V1::Reservations', type: :request do
                 description: 'Filter reservations by user ID'
       parameter name: :situation, in: :query, type: :string, required: false,
                 description: 'Filter reservations by status',
-                enum: ['not_returned', 'returned', 'overdue', 'due_today']
+                enum: [ 'not_returned', 'returned', 'overdue', 'due_today' ]
 
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response '200', 'reservations found' do
         schema type: :object,
@@ -43,7 +43,7 @@ RSpec.describe 'Api::V1::Reservations', type: :request do
                            genre: { type: :string, example: 'fiction' },
                            total_copies: { type: :integer, example: 3 }
                          },
-                         required: ['id', 'title', 'author', 'isbn', 'genre', 'total_copies']
+                         required: [ 'id', 'title', 'author', 'isbn', 'genre', 'total_copies' ]
                        },
                        user: {
                          type: :object,
@@ -53,11 +53,11 @@ RSpec.describe 'Api::V1::Reservations', type: :request do
                            email_address: { type: :string, example: 'john.doe@example.com' },
                            role: { type: :string, example: 'member' }
                          },
-                         required: ['id', 'name', 'email_address', 'role']
+                         required: [ 'id', 'name', 'email_address', 'role' ]
                        },
-                       status: { type: :string, enum: ['not_returned', 'returned', 'overdue', 'due_today'], example: 'not_returned' }
+                       status: { type: :string, enum: [ 'not_returned', 'returned', 'overdue', 'due_today' ], example: 'not_returned' }
                      },
-                     required: ['id', 'book_id', 'user_id', 'borrowed_on', 'due_on', 'book', 'user', 'status']
+                     required: [ 'id', 'book_id', 'user_id', 'borrowed_on', 'due_on', 'book', 'user', 'status' ]
                    }
                  },
                  metadata: {
@@ -80,13 +80,13 @@ RSpec.describe 'Api::V1::Reservations', type: :request do
                          overdue_count: { type: :integer, example: 2 },
                          due_today_count: { type: :integer, example: 0 }
                        },
-                       required: ['active_count', 'returned_count', 'overdue_count', 'due_today_count']
+                       required: [ 'active_count', 'returned_count', 'overdue_count', 'due_today_count' ]
                      }
                    },
-                   required: ['total_count', 'statistics']
+                   required: [ 'total_count', 'statistics' ]
                  }
                },
-               required: ['reservations', 'metadata']
+               required: [ 'reservations', 'metadata' ]
 
         let(:librarian) { create(:user, :librarian) }
         let(:member) { create(:user, :member) }
@@ -110,7 +110,7 @@ RSpec.describe 'Api::V1::Reservations', type: :request do
                  reservations: { type: :array },
                  metadata: { type: :object }
                },
-               required: ['reservations', 'metadata']
+               required: [ 'reservations', 'metadata' ]
 
         let(:book) { create(:book) }
         let(:member) { create(:user, :member) }
@@ -128,7 +128,7 @@ RSpec.describe 'Api::V1::Reservations', type: :request do
                  reservations: { type: :array },
                  metadata: { type: :object }
                },
-               required: ['reservations', 'metadata']
+               required: [ 'reservations', 'metadata' ]
 
         let(:book) { create(:book) }
         let(:member) { create(:user, :member) }

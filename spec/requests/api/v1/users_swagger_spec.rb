@@ -17,7 +17,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
             '$ref' => '#/components/schemas/UserInput'
           }
         },
-        required: ['user']
+        required: [ 'user' ]
       }
 
       response(201, 'User created successfully') do
@@ -26,7 +26,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
                  id: { type: :integer, example: 1 },
                  email_address: { type: :string, format: :email, example: 'user@example.com' },
                  name: { type: :string, example: 'John Doe' },
-                 role: { type: :string, enum: ['member', 'librarian'], example: 'member' }
+                 role: { type: :string, enum: [ 'member', 'librarian' ], example: 'member' }
                }
 
         let(:user) do

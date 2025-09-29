@@ -6,7 +6,7 @@ RSpec.describe 'Api::V1::Users::Members', type: :request do
       tags 'Users'
       description 'Returns a list of all members in the system. Only accessible by librarians.'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response '200', 'members found' do
         schema type: :array,
@@ -16,11 +16,11 @@ RSpec.describe 'Api::V1::Users::Members', type: :request do
                    id: { type: :integer, example: 1 },
                    name: { type: :string, example: 'Alice Johnson' },
                    email_address: { type: :string, example: 'alice.johnson@example.com' },
-                   role: { type: :string, example: 'member', enum: ['member'] },
+                   role: { type: :string, example: 'member', enum: [ 'member' ] },
                    created_at: { type: :string, format: 'date-time', example: '2025-09-18T10:30:00.000Z' },
                    updated_at: { type: :string, format: 'date-time', example: '2025-09-18T10:30:00.000Z' }
                  },
-                 required: ['id', 'name', 'email_address', 'role', 'created_at', 'updated_at']
+                 required: [ 'id', 'name', 'email_address', 'role', 'created_at', 'updated_at' ]
                }
 
         let(:librarian) { create(:user, :librarian) }

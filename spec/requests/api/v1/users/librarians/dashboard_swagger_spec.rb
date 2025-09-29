@@ -13,7 +13,7 @@ RSpec.describe 'Api::V1::Users::Librarians::Dashboard', type: :request do
       tags 'Librarian Dashboard'
       description 'Retrieves comprehensive dashboard information for librarians including library statistics, books due today, and members with overdue books. Only accessible by librarians.'
       produces 'application/json'
-      security [{ bearerAuth: [] }]
+      security [ { bearerAuth: [] } ]
 
       response(200, 'Dashboard data retrieved successfully') do
         schema '$ref' => '#/components/schemas/LibrarianDashboard'
