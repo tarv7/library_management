@@ -377,6 +377,43 @@ RSpec.describe Reservation, type: :model do
     end
   end
 
+  describe "#status" do
+    let(:book1) { create(:book) }
+    let(:book2) { create(:book) }
+    let(:book3) { create(:book) }
+    let(:book4) { create(:book) }
+    let(:user) { create(:user) }
+
+    let!(:not_returned_reservation) { create(:reservation, book: book1, user: user, returned_at: nil) }
+    let!(:returned_reservation) { create(:reservation, book: book2, user: user, returned_at: 2.days.ago) }
+    let!(:overdue_reservation) { create(:reservation, book: book3, user: user, borrowed_on: 20.days.ago.to_date, returned_at: nil) }
+    let!(:due_today_reservation) { create(:reservation, book: book4, user: user, borrowed_on: Reservation::DUE_WITHIN.ago.to_date, returned_at: nil) }
+
+    context "when reservation is returned" do
+      it "returns :returned" do
+        expect(returned_reservation.status).to eq(:returned)
+      end
+    end
+
+    context "when reservation is overdue (past due date and not returned)" do
+      it "returns :overdue" do
+        expect(overdue_reservation.status).to eq(:overdue)
+      end
+    end
+
+    context "when reservation is due today (due date is today and not returned)" do
+      it "returns :due_today" do
+        expect(due_today_reservation.status).to eq(:due_today)
+      end
+    end
+
+    context "when reservation is active (not returned and not overdue)" do
+      it "returns :not_returned" do
+        expect(not_returned_reservation.status).to eq(:not_returned)
+      end
+    end
+  end
+
   describe "constants" do
     it "DUE_WITHIN value" do
       expect(Reservation::DUE_WITHIN).to eq(2.weeks)

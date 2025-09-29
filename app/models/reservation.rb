@@ -30,6 +30,18 @@ class Reservation < ApplicationRecord
     update(returned_at: Time.current)
   end
 
+  def status
+    if returned_at.present?
+      :returned
+    elsif due_on < Date.current
+      :overdue
+    elsif due_on == Date.current
+      :due_today
+    else
+      :not_returned
+    end
+  end
+
   private
 
   def book_already_borrowed
