@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :users, only: :create do
         get "members/dashboard", to: "users/members/dashboard#show", on: :collection
         get "librarians/dashboard", to: "users/librarians/dashboard#show", on: :collection
+        get "members", to: "users/members#index", on: :collection
       end
       resources :auth, only: :create
       resources :reservations, only: %i[ index ]
