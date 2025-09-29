@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         get "librarians/dashboard", to: "users/librarians/dashboard#show", on: :collection
       end
       resources :auth, only: :create
+      resources :reservations, only: %i[ index ]
       resources :books do
         resources :reservations, only: %i[ create update ], controller: "books/reservations"
       end

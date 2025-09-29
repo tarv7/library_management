@@ -89,4 +89,14 @@ RSpec.configure do |config|
   def json_response
     JSON.parse(response.body)
   end
+
+  def auth_headers(user = nil)
+    user ||= create(:user)
+    token = JsonWebToken.encode_user(user)
+    {
+      'Authorization' => "Bearer #{token}",
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json'
+    }
+  end
 end
