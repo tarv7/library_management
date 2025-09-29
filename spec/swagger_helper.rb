@@ -27,6 +27,10 @@ RSpec.configure do |config|
         {
           url: 'http://localhost:3000',
           description: 'Development server'
+        },
+        {
+          url: 'https://library-management-back-e6f3cf925e79.herokuapp.com',
+          description: 'Production server'
         }
       ],
       components: {
