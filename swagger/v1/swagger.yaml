@@ -648,6 +648,8 @@ paths:
 servers:
 - url: http://localhost:3000
   description: Development server
+- url: http://library-management-back-e6f3cf925e79.herokuapp.com
+  description: Production server
 components:
   securitySchemes:
     bearerAuth:
