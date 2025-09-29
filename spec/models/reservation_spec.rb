@@ -256,6 +256,91 @@ RSpec.describe Reservation, type: :model do
         expect(due_today_reservations).not_to include(overdue_reservation)
       end
     end
+
+    describe "search" do
+      let!(:search_book1) { create(:book, title: "Search Book One", isbn: "111-1-11-111111-1", total_copies: 5) }
+      let!(:search_book2) { create(:book, title: "Search Book Two", isbn: "222-2-22-222222-2", total_copies: 5) }
+      let!(:search_user1) { create(:user, name: "Search User One", email_address: "search_user1@example.com") }
+      let!(:search_user2) { create(:user, name: "Search User Two", email_address: "search_user2@example.com") }
+
+      let!(:active_reservation) { create(:reservation, book: search_book1, user: search_user1, borrowed_on: 5.days.ago.to_date, returned_at: nil) }
+      let!(:returned_reservation) { create(:reservation, book: search_book2, user: search_user2, borrowed_on: 20.days.ago.to_date, returned_at: 5.days.ago) }
+      let!(:overdue_reservation) { create(:reservation, book: create(:book), user: create(:user), borrowed_on: 30.days.ago.to_date, returned_at: nil) }
+      let!(:due_today_reservation) { create(:reservation, book: create(:book), user: create(:user), borrowed_on: Reservation::DUE_WITHIN.ago.to_date, returned_at: nil) }
+
+      it "filters by book_id" do
+        results = Reservation.all.search(book_id: search_book1.id)
+
+        expect(results.count).to eq(1)
+        expect(results).to include(active_reservation)
+      end
+
+      it "filters by user_id" do
+        results = Reservation.all.search(user_id: search_user1.id)
+
+        expect(results.count).to eq(1)
+        expect(results).to include(active_reservation)
+      end
+
+      it "filters by situation - not_returned" do
+        results = Reservation.all.search(situation: "not_returned")
+
+        expect(results.count).to eq(3)
+        expect(results).to include(active_reservation, overdue_reservation, due_today_reservation)
+      end
+
+      it "filters by situation - returned" do
+        results = Reservation.all.search(situation: "returned")
+
+        expect(results.count).to eq(1)
+        expect(results).to include(returned_reservation)
+      end
+
+      it "filters by situation - overdue" do
+        results = Reservation.all.search(situation: "overdue")
+
+        expect(results.count).to eq(1)
+        expect(results).to include(overdue_reservation)
+      end
+
+      it "filters by situation - due_today" do
+        results = Reservation.all.search(situation: "due_today")
+
+        expect(results.count).to eq(1)
+        expect(results).to include(due_today_reservation)
+      end
+
+      it "returns all reservations when no filters are provided" do
+        results = Reservation.all.search({})
+        expect(results.count).to eq(4)
+        expect(Reservation.all.search({})).to include(active_reservation, returned_reservation, overdue_reservation, due_today_reservation)
+
+        results = Reservation.all.search(nil)
+        expect(results.count).to eq(4)
+        expect(Reservation.all.search(nil)).to include(active_reservation, returned_reservation, overdue_reservation, due_today_reservation)
+      end
+
+      it "returns correct reservations when multiple filters are applied" do
+        results = Reservation.all.search(book_id: search_book1.id, user_id: search_user1.id, situation: "not_returned")
+
+        expect(results.count).to eq(1)
+        expect(results).to include(active_reservation)
+      end
+
+      it "ignores invalid situation values" do
+        results = Reservation.all.search(situation: "invalid_situation")
+
+        expect(results.count).to eq(4)
+        expect(results).to include(active_reservation, returned_reservation, overdue_reservation, due_today_reservation)
+      end
+
+      it "returns no reservations when no matches are found" do
+        non_existent_book_id = Book.maximum(:id).to_i + 1000
+        results = Reservation.all.search(book_id: non_existent_book_id)
+
+        expect(results.count).to eq(0)
+      end
+    end
   end
 
   describe "#return" do
@@ -295,6 +380,10 @@ RSpec.describe Reservation, type: :model do
   describe "constants" do
     it "DUE_WITHIN value" do
       expect(Reservation::DUE_WITHIN).to eq(2.weeks)
+    end
+
+    it "ALLOWED_SITUATIONS values" do
+      expect(Reservation::ALLOWED_SITUATIONS).to match_array(%w[ not_returned returned overdue due_today ])
     end
   end
 end

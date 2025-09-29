@@ -1,5 +1,6 @@
 class Reservation < ApplicationRecord
   DUE_WITHIN = 2.weeks.freeze
+  ALLOWED_SITUATIONS = %w[ not_returned returned overdue due_today ].freeze
 
   belongs_to :book
   belongs_to :user
@@ -12,6 +13,16 @@ class Reservation < ApplicationRecord
   scope :returned, -> { where.not(returned_at: nil) }
   scope :overdue, -> { not_returned.where(due_on: ...Date.current) }
   scope :due_today, -> { not_returned.where(due_on: Date.current) }
+  scope :search, ->(filters) {
+    return current_scope if !filters.is_a?(Hash)
+
+    scope = current_scope
+    scope = scope.where(book_id: filters[:book_id]) if filters[:book_id].present?
+    scope = scope.where(user_id: filters[:user_id]) if filters[:user_id].present?
+    scope = scope.public_send(filters[:situation]) if ALLOWED_SITUATIONS.include?(filters[:situation])
+
+    scope
+  }
 
   before_create -> { self.due_on = borrowed_on + DUE_WITHIN }
 

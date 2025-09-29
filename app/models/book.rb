@@ -20,7 +20,6 @@ class Book < ApplicationRecord
     return current_scope if !filters.is_a?(Hash)
 
     scope = current_scope
-
     scope = scope.by_title(filters[:title]) if filters[:title].present?
     scope = scope.by_author(filters[:author]) if filters[:author].present?
     scope = scope.by_genre(filters[:genre]) if filters[:genre].present?
